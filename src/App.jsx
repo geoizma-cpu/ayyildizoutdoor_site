@@ -2,26 +2,54 @@ import React, { useState, useRef, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import './index.css';
 
+const SPIN_COOLDOWN = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
 const App = () => {
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
+  const [timeLeft, setTimeLeft] = useState('');
   const audioRef = useRef(null);
 
+  useEffect(() => {
+    checkLockStatus();
+    const timer = setInterval(checkLockStatus, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const checkLockStatus = () => {
+    const lastSpin = localStorage.getItem('lastSpinTimestamp');
+    if (lastSpin) {
+      const now = Date.now();
+      const elapsed = now - parseInt(lastSpin);
+      if (elapsed < SPIN_COOLDOWN) {
+        setIsLocked(true);
+        const remaining = SPIN_COOLDOWN - elapsed;
+        const hours = Math.floor(remaining / (1000 * 60 * 60));
+        const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+        setTimeLeft(`${hours}s ${minutes}d ${seconds}sn`);
+      } else {
+        setIsLocked(false);
+      }
+    }
+  };
+
   const startSite = () => {
+    if (isLocked) return;
+
+    // Save timestamp when they enter the wheel area
+    localStorage.setItem('lastSpinTimestamp', Date.now().toString());
+
     // Premium Confetti Explosion
     const duration = 3 * 1000;
     const animationEnd = Date.now() + duration;
     const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 3000 };
-
     const randomInRange = (min, max) => Math.random() * (max - min) + min;
 
     const interval = setInterval(() => {
-      const timeLeft = animationEnd - Date.now();
-
-      if (timeLeft <= 0) {
-        return clearInterval(interval);
-      }
-
-      const particleCount = 50 * (timeLeft / duration);
+      const remaining = animationEnd - Date.now();
+      if (remaining <= 0) return clearInterval(interval);
+      const particleCount = 50 * (remaining / duration);
       confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, colors: ['#c5a059', '#f1d38e', '#ffffff'] });
       confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }, colors: ['#c5a059', '#f1d38e', '#ffffff'] });
     }, 250);
@@ -33,7 +61,6 @@ const App = () => {
     setHasInteracted(true);
   };
 
-  // Particles Array for Background
   const particles = Array.from({ length: 20 }).map((_, i) => ({
     id: i,
     size: Math.random() * 4 + 2,
@@ -44,8 +71,7 @@ const App = () => {
 
   return (
     <div className="minimal-container">
-      {/* Floating Gold Dust Particles */}
-      {!hasInteracted ? null : particles.map(p => (
+      {hasInteracted && particles.map(p => (
         <div
           key={p.id}
           className="particle"
@@ -59,16 +85,24 @@ const App = () => {
         />
       ))}
 
-      {/* Background Audio */}
       <audio ref={audioRef} src="/casino-music.mp3" loop />
 
       {!hasInteracted ? (
         <div className="enter-overlay">
           <div className="overlay-content">
             <img src="/logo.png" alt="Ayyıldız Outdoor" className="hero-logo pulse" />
-            <button className="enter-button" onClick={startSite}>
-              ŞANSINI DENE
-            </button>
+
+            {isLocked ? (
+              <div className="lock-message fade-in">
+                <h3>YARIN TEKRAR BEKLERİZ</h3>
+                <p>Günün şansını az önce kullandın.</p>
+                <div className="countdown-timer">{timeLeft}</div>
+              </div>
+            ) : (
+              <button className="enter-button" onClick={startSite}>
+                ŞANSINI DENE
+              </button>
+            )}
           </div>
         </div>
       ) : (

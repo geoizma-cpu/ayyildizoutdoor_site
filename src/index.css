@@ -201,3 +201,38 @@ body {
     transform: translateY(0);
   }
 }
+
+/* Lock Message Styles */
+.lock-message {
+  text-align: center;
+  color: var(--gold);
+  background: rgba(197, 160, 89, 0.05);
+  padding: 2rem 3rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(197, 160, 89, 0.2);
+  backdrop-filter: blur(10px);
+  max-width: 400px;
+}
+
+.lock-message h3 {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.1em;
+}
+
+.lock-message p {
+  color: #a0a0a0;
+  margin-bottom: 1.5rem;
+}
+
+.countdown-timer {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 2rem;
+  font-weight: bold;
+  background: linear-gradient(135deg, #c5a059 0%, #f1d38e 50%, #c5a059 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(197, 160, 89, 0.3);
+}
