@@ -1,49 +1,32 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Volume2, VolumeX } from 'lucide-react';
+import React, { useRef, useEffect } from 'react';
 import './index.css';
 
 const App = () => {
-  const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef(null);
 
   useEffect(() => {
-    const handleFirstInteraction = () => {
+    const playAudio = () => {
       if (audioRef.current && audioRef.current.paused) {
         audioRef.current.play().catch(e => console.log("Autoplay blocked:", e));
-        setIsMuted(false);
       }
     };
 
-    window.addEventListener('click', handleFirstInteraction, { once: true });
-    window.addEventListener('touchstart', handleFirstInteraction, { once: true });
+    // Attempt play immediately (may be blocked by browser)
+    playAudio();
+
+    // Forced Start on first interaction (required by Chrome/Safari/Mobile)
+    const events = ['click', 'touchstart', 'mousedown', 'keydown'];
+    events.forEach(event => window.addEventListener(event, playAudio, { once: true }));
 
     return () => {
-      window.removeEventListener('click', handleFirstInteraction);
-      window.removeEventListener('touchstart', handleFirstInteraction);
+      events.forEach(event => window.removeEventListener(event, playAudio));
     };
   }, []);
-
-  const toggleMusic = () => {
-    if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play();
-        setIsMuted(false);
-      } else {
-        audioRef.current.pause();
-        setIsMuted(true);
-      }
-    }
-  };
 
   return (
     <div className="minimal-container">
       {/* Background Audio */}
-      <audio ref={audioRef} src="/casino-music.mp3" loop />
-
-      {/* Music Toggle */}
-      <button className="music-toggle" onClick={toggleMusic}>
-        {isMuted ? <VolumeX /> : <Volume2 />}
-      </button>
+      <audio ref={audioRef} src="/casino-music.mp3" autoPlay loop />
 
       <div className="content-stack">
         <img src="/logo.png" alt="Ayyıldız Outdoor" className="hero-logo" />
