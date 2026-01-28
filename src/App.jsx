@@ -67,7 +67,7 @@ const App = () => {
           <div className="overlay-content">
             <img src="/logo.png" alt="Ayyıldız Outdoor" className="hero-logo pulse" />
             <button className="enter-button" onClick={startSite}>
-              ŞANSA BAŞLA
+              ŞANSINI DENE
             </button>
           </div>
         </div>
