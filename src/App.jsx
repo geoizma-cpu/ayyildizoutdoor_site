@@ -85,7 +85,7 @@ const App = () => {
         />
       ))}
 
-      <audio ref={audioRef} src="/casino-music.mp3" loop />
+      <audio ref={audioRef} src="/reisler-de-sever.mp3" loop />
 
       {!hasInteracted ? (
         <div className="enter-overlay">
