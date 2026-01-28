@@ -25,11 +25,18 @@ body {
   width: 100vw;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 4rem 1rem;
+  align-items: center;
+  /* Changed from flex-start to center for better vertical balance */
+  padding: 2rem 1rem;
   background-color: var(--bg-color);
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .minimal-container {
+    padding: 1rem;
+  }
 }
 
 .content-stack {
@@ -68,12 +75,10 @@ body {
 
 .wheel-container {
   width: 100%;
-  min-height: 500px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 30px;
-  border: 1px solid rgba(197, 160, 89, 0.1);
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Removed fixed min-height and background frame as requested */
 }
 
 /* Interactive Overlay */
