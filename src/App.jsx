@@ -3,17 +3,35 @@ import { Volume2, VolumeX } from 'lucide-react';
 import './index.css';
 
 const App = () => {
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef(null);
+
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      if (audioRef.current && audioRef.current.paused) {
+        audioRef.current.play().catch(e => console.log("Autoplay blocked:", e));
+        setIsMuted(false);
+      }
+    };
+
+    window.addEventListener('click', handleFirstInteraction, { once: true });
+    window.addEventListener('touchstart', handleFirstInteraction, { once: true });
+
+    return () => {
+      window.removeEventListener('click', handleFirstInteraction);
+      window.removeEventListener('touchstart', handleFirstInteraction);
+    };
+  }, []);
 
   const toggleMusic = () => {
     if (audioRef.current) {
-      if (isMuted) {
-        audioRef.current.play().catch(e => console.log("Müzik başlatılamadı:", e));
+      if (audioRef.current.paused) {
+        audioRef.current.play();
+        setIsMuted(false);
       } else {
         audioRef.current.pause();
+        setIsMuted(true);
       }
-      setIsMuted(!isMuted);
     }
   };
 
