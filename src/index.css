@@ -11,24 +11,41 @@
 body {
   background-color: var(--bg-color);
   margin: 0;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow-y: auto;
 }
 
 .minimal-container {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 4rem 1rem;
   background: radial-gradient(circle at center, #111 0%, #050505 100%);
 }
 
+.content-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+  max-width: 1000px;
+}
+
 .hero-logo {
-  width: 90%;
-  max-width: 800px;
+  width: 100%;
+  max-width: 500px;
   height: auto;
-  filter: drop-shadow(0 0 40px rgba(197, 160, 89, 0.3));
-  animation: logoFadeIn 1.5s ease-out;
+  filter: drop-shadow(0 0 30px rgba(197, 160, 89, 0.25));
+  animation: logoFadeIn 1.2s ease-out;
+}
+
+.wheel-container {
+  width: 100%;
+  min-height: 500px;
+  animation: logoFadeIn 1.5s ease-out 0.3s backwards;
 }
 
 @keyframes logoFadeIn {
