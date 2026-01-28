@@ -61,25 +61,94 @@ body {
 }
 
 .music-toggle {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  background: rgba(197, 160, 89, 0.15);
-  border: 1px solid rgba(197, 160, 89, 0.3);
-  color: #c5a059;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 1000;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  display: none;
+  /* Removed as requested */
 }
 
-.music-toggle:hover {
-  background: rgba(197, 160, 89, 0.3);
-  transform: scale(1.1);
+/* Overlay Styles */
+.enter-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.8s ease;
+}
+
+.overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+  width: 90%;
+}
+
+.enter-button {
+  background: linear-gradient(135deg, #c5a059 0%, #f1d38e 50%, #c5a059 100%);
+  color: #000;
+  border: none;
+  padding: 1.5rem 4rem;
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  border-radius: 9999px;
+  cursor: pointer;
+  box-shadow: 0 0 30px rgba(197, 160, 89, 0.4);
+  transition: all 0.3s ease;
+  animation: buttonSlideUp 1s ease backwards 0.5s;
+}
+
+.enter-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 50px rgba(197, 160, 89, 0.6);
+}
+
+.pulse {
+  animation: logoPulse 2s infinite ease-in-out;
+}
+
+.fade-in {
+  animation: fadeIn 1s ease forwards;
+}
+
+@keyframes logoPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+    filter: drop-shadow(0 0 40px rgba(197, 160, 89, 0.4));
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+}
+
+@keyframes buttonSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
