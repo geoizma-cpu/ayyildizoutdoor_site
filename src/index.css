@@ -1,5 +1,8 @@
 :root {
   --bg-color: #050505;
+  --velvet: #1a0a0a;
+  --gold: #c5a059;
+  --gold-bright: #f1d38e;
 }
 
 * {
@@ -11,10 +14,12 @@
 body {
   background-color: var(--bg-color);
   margin: 0;
-  min-height: 100vh;
-  overflow-y: auto;
+  overflow-x: hidden;
+  color: white;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
+/* Velvet Texture Background */
 .minimal-container {
   min-height: 100vh;
   width: 100vw;
@@ -22,7 +27,12 @@ body {
   justify-content: center;
   align-items: flex-start;
   padding: 4rem 1rem;
-  background: radial-gradient(circle at center, #111 0%, #050505 100%);
+  background:
+    radial-gradient(circle at center, var(--velvet) 0%, #050505 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-blend-mode: overlay;
+  position: relative;
+  overflow: hidden;
 }
 
 .content-stack {
@@ -32,57 +42,53 @@ body {
   gap: 3rem;
   width: 100%;
   max-width: 1000px;
+  position: relative;
+  z-index: 10;
 }
 
+/* Neon Glow Effect */
 .hero-logo {
   width: 100%;
   max-width: 500px;
   height: auto;
-  filter: drop-shadow(0 0 30px rgba(197, 160, 89, 0.25));
-  animation: logoFadeIn 1.2s ease-out;
+  filter: drop-shadow(0 0 20px rgba(197, 160, 89, 0.2));
+  animation: logoGlow 3s infinite ease-in-out;
+}
+
+@keyframes logoGlow {
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 20px rgba(197, 160, 89, 0.2));
+    transform: scale(1);
+  }
+
+  50% {
+    filter: drop-shadow(0 0 40px rgba(197, 160, 89, 0.5));
+    transform: scale(1.02);
+  }
 }
 
 .wheel-container {
   width: 100%;
   min-height: 500px;
-  animation: logoFadeIn 1.5s ease-out 0.3s backwards;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 30px;
+  border: 1px solid rgba(197, 160, 89, 0.1);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
 }
 
-@keyframes logoFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.music-toggle {
-  display: none;
-  /* Removed as requested */
-}
-
-/* Overlay Styles */
+/* Interactive Overlay */
 .enter-overlay {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%);
+  background: radial-gradient(circle at center, #222 0%, #000 100%);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2000;
-  animation: fadeIn 0.8s ease;
-}
-
-.overlay-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4rem;
-  width: 90%;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c5a059' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
 .enter-button {
@@ -90,65 +96,107 @@ body {
   color: #000;
   border: none;
   padding: 1.5rem 4rem;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 900;
-  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
   border-radius: 9999px;
   cursor: pointer;
-  box-shadow: 0 0 30px rgba(197, 160, 89, 0.4);
-  transition: all 0.3s ease;
-  animation: buttonSlideUp 1s ease backwards 0.5s;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(197, 160, 89, 0.4);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Shimmer Animation */
+.enter-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: rotate(45deg);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -150%;
+  }
+
+  100% {
+    left: 150%;
+  }
 }
 
 .enter-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 50px rgba(197, 160, 89, 0.6);
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 60px rgba(197, 160, 89, 0.6);
+}
+
+/* Particle Effects */
+.particle {
+  position: absolute;
+  background: var(--gold);
+  border-radius: 50%;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(1px);
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.5;
+  }
+
+  90% {
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateY(-100px) rotate(360deg);
+    opacity: 0;
+  }
 }
 
 .pulse {
   animation: logoPulse 2s infinite ease-in-out;
 }
 
-.fade-in {
-  animation: fadeIn 1s ease forwards;
-}
-
 @keyframes logoPulse {
-  0% {
+
+  0%,
+  100% {
     transform: scale(1);
-    opacity: 0.9;
+    filter: brightness(1);
   }
 
   50% {
-    transform: scale(1.05);
-    opacity: 1;
-    filter: drop-shadow(0 0 40px rgba(197, 160, 89, 0.4));
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 0.9;
+    transform: scale(1.1);
+    filter: brightness(1.3) drop-shadow(0 0 50px rgba(197, 160, 89, 0.6));
   }
 }
 
-@keyframes buttonSlideUp {
+.fade-in {
+  animation: siteReveal 1.2s ease-out forwards;
+}
+
+@keyframes siteReveal {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
 
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
   }
 }
